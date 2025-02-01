@@ -1,10 +1,11 @@
 package com.example.Todo.model.user;
 
 import com.example.Todo.model.audit.DateAudit;
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = {"username"}),
+        @UniqueConstraint(columnNames = {"email"})})
 
 public class User extends DateAudit {
     @Id
