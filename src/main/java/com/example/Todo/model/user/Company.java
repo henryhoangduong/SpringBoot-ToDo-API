@@ -26,4 +26,7 @@ public class Company extends UserDateAudit {
         this.catchPhrase = catchPhrase;
         this.bs = bs;
     }
+
+    public Company() {
+    }
 }

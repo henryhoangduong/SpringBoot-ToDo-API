@@ -2,17 +2,19 @@ package com.example.Todo.model.audit;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Column;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-@EqualsAndHashCode(callSuper = true)
 @MappedSuperclass
 @Data
+@EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties(
-        value = {"createdBY", "updatedBy"},
+        value = { "createdAt", "updatedAt" },
         allowGetters = true
 )
 public abstract class UserDateAudit extends DateAudit {

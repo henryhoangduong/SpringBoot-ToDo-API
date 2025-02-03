@@ -45,7 +45,7 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<ApiResponse> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
-        if (Boolean.TRUE.equals(userRepository.existsByUsername(signUpRequest.getUsername()))) {
+        if (Boolean.TRUE.equals(userRepository.existsByUserName(signUpRequest.getUsername()))) {
             throw new BlogapiException(HttpStatus.BAD_REQUEST, "Username is already taken");
         }
         if (Boolean.TRUE.equals(userRepository.existsByEmail(signUpRequest.getEmail()))) {
@@ -61,9 +61,10 @@ public class AuthController {
 
         String password = passwordEncoder.encode(signUpRequest.getPassword());
 
-        User user = new User(firstName, lastName, username, email, password);
+        User user = new User(firstName, lastName, username,password ,email );
         List<Role> roles = new ArrayList<>();
         if (userRepository.count() == 0) {
+            System.out.println("inside");
             roles.add(roleRepository.findByName(RoleName.ROLE_USER)
                     .orElseThrow(() -> new AppException(USER_ROLE_NOT_SET)));
             roles.add(roleRepository.findByName(RoleName.ROLE_ADMIN)
@@ -72,6 +73,7 @@ public class AuthController {
             roles.add(roleRepository.findByName(RoleName.ROLE_USER)
                     .orElseThrow(() -> new AppException(USER_ROLE_NOT_SET)));
         }
+        System.out.println(user);
         user.setRoles(roles);
         User result = userRepository.save(user);
         URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/users/{userId}")
