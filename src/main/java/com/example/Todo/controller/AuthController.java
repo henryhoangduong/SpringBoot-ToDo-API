@@ -7,6 +7,7 @@ import com.example.Todo.model.role.RoleName;
 import com.example.Todo.model.user.User;
 import com.example.Todo.payload.ApiResponse;
 import com.example.Todo.payload.JwtAuthenticationResponse;
+import com.example.Todo.payload.LoginRequest;
 import com.example.Todo.payload.SignUpRequest;
 import com.example.Todo.repository.RoleRepository;
 import com.example.Todo.repository.UserRepository;
@@ -16,6 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -43,6 +47,18 @@ public class AuthController {
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
+    @PostMapping("/signin")
+    public ResponseEntity<JwtAuthenticationResponse> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(loginRequest.getUserNameOrEmail(), loginRequest.getPassword())
+        );
+        System.out.println("authentication: " + authentication);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = jwtTokenProvider.generateToken(authentication);
+        System.out.println("jwt: " + jwt);
+        return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
+    }
+
     @PostMapping("/signup")
     public ResponseEntity<ApiResponse> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
         if (Boolean.TRUE.equals(userRepository.existsByUserName(signUpRequest.getUsername()))) {
@@ -61,7 +77,7 @@ public class AuthController {
 
         String password = passwordEncoder.encode(signUpRequest.getPassword());
 
-        User user = new User(firstName, lastName, username,password ,email );
+        User user = new User(firstName, lastName, username, password, email);
         List<Role> roles = new ArrayList<>();
         if (userRepository.count() == 0) {
             System.out.println("inside");
