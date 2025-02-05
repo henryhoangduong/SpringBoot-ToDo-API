@@ -70,4 +70,11 @@ public class UserPrincipal implements UserDetails {
                 user.getEmail(), user.getPassword(), authorities);
     }
 
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
 }
