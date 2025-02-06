@@ -1,6 +1,7 @@
 package com.example.Todo.model.user;
 
 import com.example.Todo.model.Album;
+import com.example.Todo.model.Post;
 import com.example.Todo.model.audit.DateAudit;
 import com.example.Todo.model.role.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -62,6 +63,9 @@ public class User extends DateAudit {
     private List<Album> albums;
     public User() {
     }
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Post> posts;
 
     public User(String firstName, String userName, String lastName, String password, String email) {
         this.firstName = firstName;

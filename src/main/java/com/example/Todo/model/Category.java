@@ -1,5 +1,6 @@
 package com.example.Todo.model;
 
+import com.example.Todo.model.audit.UserDateAudit;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
@@ -15,7 +16,7 @@ import java.util.List;
 @Data
 @Table(name = "categories")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class Category {
+public class Category extends UserDateAudit {
     private static final long serialVersionUID = 1L;
 
     @Id
