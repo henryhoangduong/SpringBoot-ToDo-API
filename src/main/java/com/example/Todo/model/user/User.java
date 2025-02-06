@@ -1,5 +1,6 @@
 package com.example.Todo.model.user;
 
+import com.example.Todo.model.Album;
 import com.example.Todo.model.audit.DateAudit;
 import com.example.Todo.model.role.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -55,6 +56,10 @@ public class User extends DateAudit {
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private List<Role> roles;
 
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Album> albums;
     public User() {
     }
 
