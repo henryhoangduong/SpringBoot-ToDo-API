@@ -22,47 +22,44 @@ import java.util.List;
 public class User extends DateAudit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Getter
-    @Setter
     private Long id;
     @Column
-    @Getter
-    @Setter
+
     private String firstName;
     @Column
-    @Getter
-    @Setter
+
     private String userName;
     @Column
-    @Getter
-    @Setter
+
     private String lastName;
     @Column
-    @Getter
-    @Setter
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
     @Column
-    @Getter
-    @Setter
     private String email;
     @Column
-    @Getter
-    @Setter
     private Address address;
 
     @ManyToMany
-    @Getter
-    @Setter
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private List<Role> roles;
 
+    @Column(name = "phone")
+    private String phone;
+    @Column(name = "website")
+    private String website;
+
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "company_id")
+    public Company company;
 
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Album> albums;
+
     public User() {
     }
+
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Post> posts;
@@ -74,6 +71,7 @@ public class User extends DateAudit {
         this.password = password;
         this.email = email;
     }
+
 
     public Long getId() {
         return id;
@@ -139,6 +137,46 @@ public class User extends DateAudit {
         this.roles = roles;
     }
 
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getWebsite() {
+        return website;
+    }
+
+    public void setWebsite(String website) {
+        this.website = website;
+    }
+
+    public Company getCompany() {
+        return company;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
+    }
+
+    public List<Album> getAlbums() {
+        return albums;
+    }
+
+    public void setAlbums(List<Album> albums) {
+        this.albums = albums;
+    }
+
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -150,7 +188,7 @@ public class User extends DateAudit {
                 ", email='" + email + '\'' +
                 ", address=" + address +
                 ", roles=" + roles +
-                "," +super.toString()+
+                "," + super.toString() +
                 '}';
     }
 }

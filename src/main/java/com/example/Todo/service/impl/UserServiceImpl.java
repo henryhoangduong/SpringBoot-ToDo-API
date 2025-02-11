@@ -1,8 +1,10 @@
 package com.example.Todo.service.impl;
 
+import com.example.Todo.model.user.User;
 import com.example.Todo.payload.UserIdentityAvailability;
 import com.example.Todo.payload.UserProfile;
 import com.example.Todo.payload.UserSummary;
+import com.example.Todo.repository.PostRepository;
 import com.example.Todo.repository.UserRepository;
 import com.example.Todo.security.UserPrincipal;
 import com.example.Todo.service.UserService;
@@ -13,6 +15,10 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PostRepository postRepository;
+
     @Override
     public UserSummary getCurrentUser(UserPrincipal currentUser) {
         return new UserSummary(currentUser.getId(), currentUser.getUsername(), currentUser.getFirstName(),
@@ -33,9 +39,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserProfile getUserProfile(String username) {
-        User user = userRepository.get
-
+        User user = userRepository.getUserByName(username);
+        Long postCount = postRepository.countByCreatedBy(user.getId());
+        return new UserProfile(user.getId(), user.getUserName(), user.getFirstName(), user.getLastName(),
+                user.getCreatedAt(), user.getEmail(), user.getAddress(), user.getPhone(), user.getWebsite(),
+                user.getCompany(), postCount);
     }
-
-
 }

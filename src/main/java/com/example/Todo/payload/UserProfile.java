@@ -19,4 +19,21 @@ public class UserProfile {
     private String website;
     private Company company;
     private Long postCount;
+
+    public UserProfile() {
+    }
+
+    public UserProfile(Long id, String username, String firstName, String lastName, Instant joinedAt, String email, Address address, String phone, String website, Company company, Long postCount) {
+        this.id = id;
+        this.username = username;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.joinedAt = joinedAt;
+        this.email = email;
+        this.address = address;
+        this.phone = phone;
+        this.website = website;
+        this.company = company;
+        this.postCount = postCount;
+    }
 }
